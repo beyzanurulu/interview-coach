@@ -46,4 +46,4 @@ cd apps/web && npm test
 
 ## Mimari kararlar
 - [ADR-001: Genel mimari](docs/adr/001-mimari.md)
-- [ADR-002: LLM sağlayıcısı](docs/adr/002-llm-saglayici.md) (onay bekliyor)
+- [ADR-002: LLM sağlayıcısı](docs/adr/002-llm-saglayici.md): Groq `qwen/qwen3.8-27b`

@@ -18,7 +18,7 @@ from pathlib import Path
 import httpx
 
 GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
-GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
+GROQ_MODEL = os.getenv("GROQ_MODEL", "qwen/qwen3.8-27b")
 
 JOB_AD = """Junior Backend Geliştirici (İstanbul, hibrit)
 Python ve FastAPI ile REST servisleri geliştirecek, PostgreSQL ile çalışmış,
