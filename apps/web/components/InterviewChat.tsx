@@ -4,6 +4,11 @@ import { useEffect, useRef, useState } from "react";
 
 import { formatRemaining, type InterviewState } from "@/lib/interview";
 
+const KIND_LABELS: Partial<Record<string, string>> = {
+  follow_up: "Takip sorusu",
+  candidate_invite: "Sizin sorularınız",
+};
+
 const END_TEXT = {
   completed: "Mülakat tamamlandı.",
   timeout: "Süre doldu.",
@@ -45,9 +50,11 @@ export function InterviewChat({
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between text-sm text-neutral-600 dark:text-neutral-400">
         <span>
-          {state.totalQuestions > 0
-            ? `Soru ${state.questionNumber} / ${state.totalQuestions}`
-            : "Hazırlanıyor…"}
+          {state.candidateStage
+            ? "Sizin sorularınız"
+            : state.totalQuestions > 0
+              ? `Soru ${state.questionNumber} / ${state.totalQuestions}`
+              : "Hazırlanıyor…"}
         </span>
         <span className="font-mono">
           {state.remainingS !== null ? formatRemaining(state.remainingS) : "--:--"}
@@ -76,9 +83,9 @@ export function InterviewChat({
                 : "max-w-[85%] self-end rounded-lg bg-blue-600 p-3 text-white"
             }
           >
-            {m.kind === "follow_up" && (
+            {KIND_LABELS[m.kind] && (
               <span className="mb-1 block text-xs text-neutral-500 dark:text-neutral-400">
-                Takip sorusu
+                {KIND_LABELS[m.kind]}
               </span>
             )}
             <p className="whitespace-pre-wrap">{m.text}</p>

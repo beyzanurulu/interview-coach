@@ -39,3 +39,7 @@ olarak eklenecek ve aynı scriptle test edilecek.
 - Tek sağlayıcıya bağımlılık riski: ücretsiz kota/model listesi değişebilir
   (`llama-3.3-70b-versatile` test sırasında kaldırılmıştı). Sağlayıcı arayüzü ve yedek bu riski azaltır.
 - Gizlilik sayfasında Groq'a metin gönderildiği belirtilecek.
+- Güncelleme (2026-10-31): Ücretsiz katman sınırları model başına 1000 istek/gün, 8000 token/dk,
+  1000 çıktı token/dk ve **200.000 token/gün**. Günlük token sınırı asıl darboğaz; kapasite
+  artırma seçenekleri (Gemini yedeği, görev başına farklı model) onay kapısı #2 olarak ayrıca
+  değerlendirilecek.

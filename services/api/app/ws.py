@@ -7,8 +7,8 @@
 Sunucu → istemci:
   {"type": "status", "status": "preparing"}
   {"type": "ready", "total_questions", "duration_s"}
-  {"type": "interviewer", "text", "kind": question|follow_up|closing, "question_index",
-   "remaining_s"}
+  {"type": "interviewer", "text", "kind", "question_index", "remaining_s"}
+    kind: question | follow_up | redirect | candidate_invite | candidate_answer | closing
   {"type": "ended", "reason"}
   {"type": "error", "code", "message"}
 """

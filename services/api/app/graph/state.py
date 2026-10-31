@@ -7,13 +7,27 @@ Language = Literal["tr", "en"]
 InterviewType = Literal["technical", "behavioral", "mixed"]
 Status = Literal["running", "wrapping_up", "done", "aborted"]
 EndReason = Literal["completed", "timeout", "user_ended"]
-Decision = Literal["follow_up", "next", "wrap_up"]
+Stage = Literal["warmup", "experience", "technical", "behavioral"]
+Phase = Literal["questions", "candidate_questions"]
+AnswerType = Literal[
+    "answer",
+    "clarification",
+    "dont_know",
+    "asks_for_answer",
+    "off_topic",
+    "ai_question",
+    "inappropriate",
+    "unclear",
+]
+Decision = Literal[
+    "follow_up", "next", "redirect", "candidate_questions", "answer_candidate", "wrap_up"
+]
 
 
 class PlanItem(TypedDict):
     topic: str
     question: str
-    kind: Literal["technical", "behavioral"]
+    stage: Stage
     asked: bool
     depth: int
 
@@ -33,7 +47,12 @@ class InterviewState(TypedDict, total=False):
     max_duration_s: int
     status: Status
     end_reason: EndReason | None
+    phase: Phase
+    last_question: str  # tekrar sorulabilmesi için son sorulan soru (ana, takip veya açıklama)
+    redirect_counts: dict[str, int]  # konu dışı vb. davranışların sayısı (uyarı tonu için)
+    candidate_q_count: int
     # interviewer düğümünün son kararı (yönlendirme için)
     decision: Decision | None
     transition: str
     follow_up_question: str
+    reply: str

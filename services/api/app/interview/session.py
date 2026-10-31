@@ -8,7 +8,9 @@ from langgraph.types import Command
 
 from app.graph.state import InterviewType, Language
 
-UtteranceKind = Literal["question", "follow_up", "closing"]
+UtteranceKind = Literal[
+    "question", "follow_up", "redirect", "candidate_invite", "candidate_answer", "closing"
+]
 
 
 @dataclass

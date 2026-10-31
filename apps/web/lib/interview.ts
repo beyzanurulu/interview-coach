@@ -3,7 +3,13 @@
 export type InterviewType = "technical" | "behavioral" | "mixed";
 export type Language = "tr" | "en";
 export type EndReason = "completed" | "timeout" | "user_ended";
-export type UtteranceKind = "question" | "follow_up" | "closing";
+export type UtteranceKind =
+  | "question"
+  | "follow_up"
+  | "redirect"
+  | "candidate_invite"
+  | "candidate_answer"
+  | "closing";
 
 export interface CVSummary {
   skills: string[];
@@ -47,6 +53,7 @@ export interface InterviewState {
   messages: ChatMessage[];
   totalQuestions: number;
   questionNumber: number; // 1'den başlar; 0 = henüz soru yok
+  candidateStage: boolean; // "bize sorunuz var mı" aşaması
   remainingS: number | null;
   awaitingReply: boolean;
   rejectedAnswer: string | null; // sunucunun reddettiği cevap, giriş kutusuna geri konur
@@ -67,6 +74,7 @@ export const initialState: InterviewState = {
   messages: [],
   totalQuestions: 0,
   questionNumber: 0,
+  candidateStage: false,
   remainingS: null,
   awaitingReply: false,
   rejectedAnswer: null,
@@ -96,6 +104,7 @@ function onServer(state: InterviewState, msg: ServerMessage): InterviewState {
         remainingS: msg.remaining_s,
         questionNumber:
           msg.question_index === null ? state.questionNumber : msg.question_index + 1,
+        candidateStage: state.candidateStage || msg.kind === "candidate_invite",
         messages: [
           ...state.messages,
           { role: "interviewer", text: msg.text, kind: msg.kind },

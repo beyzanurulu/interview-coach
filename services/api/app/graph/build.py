@@ -10,9 +10,22 @@ from app.graph.nodes import make_nodes
 from app.graph.state import InterviewState
 from app.providers.llm.base import LLMProvider
 
+INTERVIEWER_ROUTES = {
+    "follow_up": "follow_up",
+    "next": "ask",
+    "redirect": "redirect",
+    "candidate_questions": "candidate_questions",
+    "answer_candidate": "answer_candidate",
+    "wrap_up": "wrap_up",
+}
+
 
 def route_after_interviewer(state: InterviewState) -> str:
-    return {"follow_up": "follow_up", "next": "ask"}.get(state.get("decision") or "", "wrap_up")
+    return INTERVIEWER_ROUTES.get(state.get("decision") or "", "wrap_up")
+
+
+def route_after_answer_candidate(state: InterviewState) -> str:
+    return "wrap_up" if state.get("decision") == "wrap_up" else "await_answer"
 
 
 def build_interview_graph(
@@ -29,14 +42,15 @@ def build_interview_graph(
 
     graph.add_edge(START, "planner")
     graph.add_edge("planner", "ask")
-    graph.add_edge("ask", "await_answer")
+    for asking in ("ask", "follow_up", "redirect", "candidate_questions"):
+        graph.add_edge(asking, "await_answer")
     graph.add_edge("await_answer", "interviewer")
     graph.add_conditional_edges(
-        "interviewer",
-        route_after_interviewer,
-        {"follow_up": "follow_up", "ask": "ask", "wrap_up": "wrap_up"},
+        "interviewer", route_after_interviewer, list(set(INTERVIEWER_ROUTES.values()))
     )
-    graph.add_edge("follow_up", "await_answer")
+    graph.add_conditional_edges(
+        "answer_candidate", route_after_answer_candidate, ["wrap_up", "await_answer"]
+    )
     graph.add_edge("wrap_up", END)
-    # Aşama 1: oturum durumu bellekte. Kalıcı saklama Aşama 4'te (Supabase).
+    # Oturum durumu bellekte. Kalıcı saklama Aşama 4'te (Supabase).
     return graph.compile(checkpointer=checkpointer or InMemorySaver())

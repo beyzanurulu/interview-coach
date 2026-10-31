@@ -15,6 +15,11 @@ class JobSummary(BaseModel):
     skills: list[str] = Field(default_factory=list, max_length=25)
     nice_to_have: list[str] = Field(default_factory=list, max_length=15)
     responsibilities: list[str] = Field(default_factory=list, max_length=10)
+    company: str | None = Field(default=None, max_length=120)
+    location: str | None = Field(default=None, max_length=120)
+    work_mode: Literal["onsite", "hybrid", "remote", "unknown"] = "unknown"
+    # İlanda yazan diğer somut bilgiler (yan haklar, süreç, ekip...); aday sorularına cevap için.
+    other_details: list[str] = Field(default_factory=list, max_length=10)
 
 
 SYSTEM_PROMPT = f"""Bir iş ilanı analiz asistanısın. İlandan şu alanlarla JSON çıkar:
@@ -23,6 +28,11 @@ SYSTEM_PROMPT = f"""Bir iş ilanı analiz asistanısın. İlandan şu alanlarla 
 - skills: zorunlu teknik ve davranışsal beceriler (kısa ifadeler)
 - nice_to_have: artı olarak belirtilen beceriler
 - responsibilities: en fazla 6 ana sorumluluk
+- company: şirket adı (yoksa null)
+- location: şehir/konum (yoksa null)
+- work_mode: "onsite" | "hybrid" | "remote" | "unknown"
+- other_details: ilanda açıkça yazan diğer somut bilgiler (yan haklar, mülakat süreci, ekip,
+  çalışma saatleri); ilanda yoksa boş liste. Asla tahmin etme.
 
 İlan dilini koru. Sadece JSON döndür.
 {DATA_RULE}"""
@@ -46,5 +56,5 @@ async def parse_job(llm: LLMProvider, text: str, *, max_chars: int) -> JobSummar
         ],
         JobSummary,
         purpose="job_parse",
-        max_tokens=400,
+        max_tokens=600,
     )

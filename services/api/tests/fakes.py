@@ -47,22 +47,36 @@ JOB_SUMMARY = {
 }
 
 
-def make_plan(n: int) -> dict:
+def make_plan(n: int, language: str = "tr") -> dict:
+    stages = ["warmup", "experience"] + ["technical"] * max(0, n - 2)
+    template = "Soru {i} için ne düşünürsünüz?" if language == "tr" else "What about topic {i}?"
     return {
         "questions": [
-            {"topic": f"konu {i}", "question": f"Soru {i} nedir?", "kind": "technical"}
+            {"topic": f"konu {i}", "question": template.format(i=i), "stage": stages[i]}
             for i in range(n)
         ]
     }
 
 
+def q(i: int) -> str:
+    return f"Soru {i} için ne düşünürsünüz?"
+
+
 def decision(kind: str, **kw) -> dict:
-    base = {"decision": kind, "reason": "", "transition": "", "follow_up_question": ""}
+    base = {"answer_type": "answer", "decision": kind, "transition": "", "follow_up_question": ""}
     if kind == "follow_up":
         base["follow_up_question"] = "Biraz daha somut anlatır mısınız?"
     if kind == "next":
         base["transition"] = "Anladım, teşekkürler."
     return {**base, **kw}
+
+
+def classified(answer_type: str, **kw) -> dict:
+    return {"answer_type": answer_type, "decision": None, **kw}
+
+
+def candidate(kind: str, answer: str = "") -> dict:
+    return {"type": kind, "answer": answer}
 
 
 def minimal_pdf(text: str) -> bytes:

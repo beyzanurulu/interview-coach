@@ -5,5 +5,22 @@
   "duration_min": 10,
   "job_text": "Junior Backend Geliştirici (İstanbul, hibrit)\nPython ve FastAPI ile REST servisleri geliştirecek, PostgreSQL ile çalışmış, Docker ve temel CI/CD bilgisi olan, 0-2 yıl deneyimli takım arkadaşı arıyoruz. Takım içinde kod incelemelerine katılacak, ürün ekibiyle birlikte çalışacak.\nArtı: Redis, mesaj kuyrukları, test yazma alışkanlığı.",
   "persona": "Bilgisayar mühendisliği yeni mezunusun. Bir staj yaptın (3 ay, e-ticaret şirketinde backend stajı) ve bitirme projen FastAPI + PostgreSQL ile bir kütüphane rezervasyon sistemi. Docker'ı temel düzeyde biliyorsun, Redis bilmiyorsun.",
-  "answer_styles": ["detailed", "shallow", "detailed", "shallow", "shallow", "dont_know", "injection", "detailed", "detailed", "detailed", "detailed", "detailed"]
+  "answer_styles": [
+    "detailed",
+    "shallow",
+    "detailed",
+    "shallow",
+    "shallow",
+    "dont_know",
+    "injection",
+    "detailed",
+    "detailed",
+    "detailed",
+    "detailed",
+    "detailed"
+  ],
+  "candidate_styles": [
+    "ask_known",
+    "no_question"
+  ]
 }

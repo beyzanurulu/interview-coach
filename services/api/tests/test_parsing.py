@@ -9,6 +9,7 @@ async def test_parse_job_returns_summary_and_wraps_text_as_data() -> None:
     llm = FakeLLM({"job_parse": JOB_SUMMARY})
     summary = await parse_job(llm, JOB_TEXT, max_chars=8000)
     assert summary.level == "junior" and "FastAPI" in summary.skills
+    assert summary.work_mode == "unknown" and summary.other_details == []
     user_msg = llm.calls[0][1][1]["content"]
     assert user_msg.startswith('<veri kaynak="ilan">')
 

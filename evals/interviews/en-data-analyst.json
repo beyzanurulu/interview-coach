@@ -5,5 +5,16 @@
   "duration_min": 5,
   "job_text": "Junior Data Analyst - Istanbul\nWe are looking for a data analyst with 0-2 years of experience. Strong SQL and Excel skills, experience with dashboards (Power BI or Tableau), and the ability to explain insights to non-technical stakeholders. Nice to have: Python (pandas).",
   "persona": "You recently graduated in industrial engineering. You did a 6-month internship in a retail company's analytics team where you built a weekly sales dashboard in Power BI.",
-  "answer_styles": ["detailed", "shallow", "detailed", "detailed", "detailed", "detailed"]
+  "answer_styles": [
+    "detailed",
+    "shallow",
+    "detailed",
+    "detailed",
+    "detailed",
+    "detailed"
+  ],
+  "candidate_styles": [
+    "ask_known",
+    "no_question"
+  ]
 }

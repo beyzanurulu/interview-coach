@@ -5,7 +5,15 @@ from starlette.websockets import WebSocketDisconnect
 from app.core.config import Settings
 from app.main import create_app
 from app.ws import RateLimiter
-from tests.fakes import JOB_SUMMARY, JOB_TEXT, FakeLLM, decision, make_plan, minimal_pdf
+from tests.fakes import (
+    JOB_SUMMARY,
+    JOB_TEXT,
+    FakeLLM,
+    candidate,
+    decision,
+    make_plan,
+    minimal_pdf,
+)
 
 
 def make_client(llm: FakeLLM, clock=None) -> TestClient:
@@ -30,12 +38,8 @@ def test_full_text_interview_over_websocket() -> None:
         {
             "job_parse": JOB_SUMMARY,
             "plan": make_plan(3),
-            "interviewer": [
-                decision("follow_up"),
-                decision("next"),
-                decision("next"),
-                decision("next"),
-            ],
+            "interviewer": [decision("follow_up")] + [decision("next")] * 3,
+            "candidate_qa": [candidate("no_question")],
         }
     )
     with make_client(llm) as client, client.websocket_connect("/ws/interview") as ws:
@@ -53,8 +57,10 @@ def test_full_text_interview_over_websocket() -> None:
             ws.send_json({"type": "answer", "text": "detaylı cevap"})
             assert ws.receive_json()["question_index"] == expected_index
         ws.send_json({"type": "answer", "text": "son cevap"})
+        assert ws.receive_json()["kind"] == "candidate_invite"
+        ws.send_json({"type": "answer", "text": "Sorum yok, teşekkürler."})
         closing = ws.receive_json()
-        assert closing["kind"] == "closing" and closing["text"].startswith("Sorularım bu kadardı")
+        assert closing["kind"] == "closing" and closing["text"].startswith("Görüşmemiz")
         assert ws.receive_json() == {"type": "ended", "reason": "completed"}
 
 

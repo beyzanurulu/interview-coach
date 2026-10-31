@@ -100,6 +100,23 @@ describe("interviewReducer", () => {
     expect(state.awaitingReply).toBe(false);
   });
 
+  it("enters the candidate questions stage", () => {
+    const state = run([
+      ...started,
+      {
+        type: "server",
+        message: {
+          type: "interviewer",
+          text: "Sizin bize sormak istediğiniz bir şey var mı?",
+          kind: "candidate_invite",
+          question_index: null,
+          remaining_s: 80,
+        },
+      },
+    ]);
+    expect(state.candidateStage).toBe(true);
+  });
+
   it("ticks the countdown only while running", () => {
     expect(run([...started, { type: "tick" }]).remainingS).toBe(597);
     expect(run([{ type: "tick" }]).remainingS).toBeNull();
