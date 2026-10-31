@@ -15,6 +15,24 @@ class Settings(BaseSettings):
     log_level: str = "INFO"
     cors_origins: Annotated[list[str], NoDecode] = ["http://localhost:3000"]
 
+    # LLM (ADR-002)
+    llm_provider: Literal["groq", "ollama"] = "groq"
+    groq_api_key: str = ""
+    groq_model: str = "qwen/qwen3.8-27b"
+    ollama_base_url: str = "http://localhost:11434/v1"
+    ollama_model: str = "qwen3:8b"
+    llm_timeout_s: float = 30.0
+    llm_max_retry_wait_s: float = 10.0
+
+    # Mülakat
+    interview_durations_min: list[int] = [5, 10, 15]
+    max_follow_ups: int = 2
+    max_job_chars: int = 8000
+    max_cv_chars: int = 8000
+    max_answer_chars: int = 4000
+    max_cv_bytes: int = 2_000_000
+    wrap_up_grace_s: int = 30
+
     @field_validator("cors_origins", mode="before")
     @classmethod
     def parse_cors_origins(cls, value: object) -> object:
