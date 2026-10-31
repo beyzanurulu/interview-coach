@@ -13,6 +13,7 @@ from app.core.config import Settings
             ["https://a.vercel.app", "http://localhost:3000"],
         ),
         ('["https://a.vercel.app"]', ["https://a.vercel.app"]),
+        ("https://a.vercel.app/", ["https://a.vercel.app"]),
     ],
 )
 def test_cors_origins_parsing(

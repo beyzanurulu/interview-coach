@@ -22,9 +22,9 @@ class Settings(BaseSettings):
         if not isinstance(value, str):
             return value
         value = value.strip()
-        if value.startswith("["):
-            return json.loads(value)
-        return [origin.strip() for origin in value.split(",") if origin.strip()]
+        origins = json.loads(value) if value.startswith("[") else value.split(",")
+        # Tarayıcı Origin başlığını sonda "/" olmadan gönderir.
+        return [origin.strip().rstrip("/") for origin in origins if origin.strip()]
 
 
 @lru_cache
